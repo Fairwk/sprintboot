@@ -86,13 +86,52 @@ public class MyLinkedList {
         return false;
 
     }
+
+    private Node searchPrev(int key){
+        Node prev = this.head;
+        while(prev.next != null){
+            if(prev.next.data == key){
+                return prev;
+            }else{
+                prev = prev.next;
+            }
+        }
+        return null;
+    }
     //删除第一次出现关键字为key的节点
     public void remove(int key){
+        if(this.head == null){
+            return;
+        }
+        if(this.head.data == key){
+            this.head = this.head.next;
+            return;
+        }
+        Node prev = searchPrev(key);
+        if(prev == null){
+            System.out.println("根本没有这个节点! ");
+            return;
+        }
+        Node del = prev.next;
+        prev.next = del.next;
 
     }
     //删除所有值为key的节点
     public void removeAllKey(int key){
-
+        Node prev = this.head;
+        Node cur = this.head.next;//代表要删除的节点
+        while(cur != null){
+            if(cur.data == key){
+                prev.next = cur.next;
+                cur = cur.next;
+            }else{
+                prev = cur;
+                cur = cur.next;
+            }
+        }
+        if(this.head.data == key){
+            this.head = this.head.next;
+        }
     }
     //得到单链表的长度
     public int size(){
@@ -114,8 +153,57 @@ public class MyLinkedList {
         }
 
     }
-    //清空单链表
+    //清空单链表  释放内存
     public void clear(){
-
+        this.head = null;
+    }
+    public Node reverseList(){
+        Node cur = this.head;
+        Node prev = null;
+        Node newHead = null;
+        while(cur != null){
+            Node curNext = cur.next;
+            if(curNext == null){
+                newHead = cur;
+            }
+            cur.next = prev;
+            prev = cur;
+            cur = curNext;
+        }
+        return newHead;
+    }
+    public void display2(Node newHead){
+        Node cur = newHead;
+        while(cur != null){
+            System.out.print(cur.data + " ");
+            cur = cur.next;
+        }
+    }
+    public Node middleNode(){
+        Node fast = this.head;
+        Node slow = this.head;
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+    public Node FindKthToTail(int k){
+        if(k < 0 || k > size()){
+            //throw new RuntimeException("k不合理! ");
+            System.out.println("k不合法");
+            return null;
+        }
+        Node fast = this.head;
+        Node slow = this.head;
+        while(k-1 > 0){
+            fast = fast.next;
+            k--;
+        }
+        while(fast.next != null){
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
     }
 }
