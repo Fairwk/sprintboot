@@ -189,7 +189,10 @@ public class MyLinkedList {
         return slow;
     }
     public Node FindKthToTail(int k){
-        if(k < 0 || k > size()){
+        if(head == null){
+            return null;
+        }
+        if(k <= 0){
             //throw new RuntimeException("k不合理! ");
             System.out.println("k不合法");
             return null;
@@ -197,13 +200,60 @@ public class MyLinkedList {
         Node fast = this.head;
         Node slow = this.head;
         while(k-1 > 0){
-            fast = fast.next;
-            k--;
+            if(fast.next != null) {
+                fast = fast.next;
+                k--;
+            }else{
+                System.out.println("没有这个节点! ");
+                return null;
+            }
         }
         while(fast.next != null){
             fast = fast.next;
             slow = slow.next;
         }
         return slow;
+    }
+    public Node partition (int x){
+        Node bs = null;
+        Node be = null;
+        Node as = null;
+        Node ae = null;
+        Node cur = this.head;
+        while(cur != null){
+            if(cur.data < x){
+                //第一次插入
+                if(bs == null){
+                    bs = cur;
+                    be = cur;
+
+                }else{
+                    be.next = cur;
+                    be = be.next;
+                }
+            }else{
+                //第一次插入
+                if(as == null){
+                    as = cur;
+                    ae = cur;
+
+                }else{
+                    ae.next = cur;
+                    ae = ae.next;
+                }
+            }
+            cur = cur.next;
+        }
+        //1.判断bs是否为空  如果bs == null返回 as
+        if(bs == null){
+            return as;
+        }
+        //2.如果bs不为空  需要进行拼接
+        be.next = as;
+        //3.如果ae不为空  ae的next需要置为空
+        if(ae != null){
+            ae.next = null;
+        }
+        return bs;
     }
 }
