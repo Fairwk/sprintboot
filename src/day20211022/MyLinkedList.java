@@ -256,4 +256,65 @@ public class MyLinkedList {
         }
         return bs;
     }
+    public Node deleteDuplication(){
+        Node cur = this.head;
+        Node newHead = new Node(-1);
+        Node tmp = newHead;
+        while(cur != null){
+            if(cur.next != null && cur.data == cur.next.data){
+                while(cur.next != null &&  cur.data == cur.next.data){
+                    cur = cur.next;
+                }
+                cur = cur.next;//需要多走一步,因为此时cur还停留在相等的最后一个节点需要多走一步才能到不相等的那个
+            }else{
+                tmp.next = cur;
+                tmp = tmp.next;
+                cur = cur.next;
+
+            }
+        }
+        tmp.next = null;
+        return newHead.next;
+    }
+    public boolean chkPalindrome(){
+
+        //单链表为空肯定不是回文结构
+        if(this.head == null){
+            return false;
+        }
+        //这是只有头节点自己必然为回文结构
+        if(this.head.next == null){
+            return true;
+        }
+
+        //1.找到链表中间位置
+        Node fast = this.head;
+        Node slow = this.head;
+
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        //2.翻转单链表的后半部分  slow在中间位置
+        Node cur = slow.next;
+        while(cur != null){
+            Node curNext = cur.next;
+            cur.next = slow;
+            slow = cur;
+            cur = curNext;
+        }
+        //slow已经是最后一个节点了
+        //3.一个从头走一个从尾走
+        while(slow != this.head){
+            if(slow.data != this.head.data){
+                return false;
+            }
+            if(this.head.next == slow){
+                return true;
+            }
+            slow = slow.next;
+            this.head = this.head.next;
+        }
+        return true;
+    }
 }
