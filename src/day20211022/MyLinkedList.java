@@ -151,6 +151,7 @@ public class MyLinkedList {
             System.out.print(cur.data + " ");
             cur = cur.next;
         }
+        System.out.println();
 
     }
     //清空单链表  释放内存
@@ -316,5 +317,38 @@ public class MyLinkedList {
             this.head = this.head.next;
         }
         return true;
+    }
+    public boolean hasCycle(){
+        Node fast = this.head;
+        Node slow = this.head;
+        while(fast != null || fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(slow == fast){
+                return true;
+            }
+        }
+        return false;
+    }
+    public Node detectCycle(){
+        Node fast = this.head;
+        Node slow = this.head;
+        while(fast != null || fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(slow == fast){
+                break;
+            }
+        }
+        if(fast == null || fast.next == null){
+            return null;
+
+        }
+        slow = this.head;
+        while(fast != slow){
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
     }
 }
