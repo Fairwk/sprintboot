@@ -1,0 +1,59 @@
+package day20211118;
+/*
+1.顺序存储 存储的是一颗完全二叉树 如果是非完全二叉树会有空间浪费
+2.堆逻辑上是一颗完全二叉树
+3.堆物理上是保存在数组中的
+4.每棵树的根节点都是大于孩子节点的,此时这棵树就叫做大根堆
+5.棵树的根节点都是小于孩子节点的,此时这棵树就叫做小根堆
+  (不管是大根堆还是小根堆 左右还在的大小关系是不确定的,我们只能确定根节点和孩子节点的关系)
+6.堆的作用就是快速找到最值
+
+
+ */
+public class TestHeap {
+    public int[] elem;
+    public int usedSize;
+
+    public TestHeap(){
+        this.elem = new int[10];
+    }
+    /*
+    建一个大堆
+     */
+
+    public void createHeap(int[] array){
+        for (int i = 0; i < array.length; i++) {
+            this.elem[i] = array[i];
+            this.usedSize++;
+        }
+        //parent 就代表每颗子树的根节点
+        for(int parent = (array.length-1-1)/2;parent >= 0;parent--){
+            //第二个参数 每次调整的结束位置应该是 : this.usedSise(10)取小于号即可
+            adjustDown(parent,this.usedSize);
+        }
+    }
+    public void adjustDown(int root,int len){
+        int parent = root;
+        int child = 2*parent+1;
+
+        while(child < len){
+            //可以进行调整 找到左右孩子的最大值
+            //1.前提是要有右孩子
+            //2.左孩子比右孩子小 才进行这一步
+            if(child + 1 < len && this.elem[child] < this.elem[child+1]){
+                child++;
+                //这一步能保证,child下标的数据 一定是左右孩子的最大值的下标
+            }
+            if(this.elem[child] > this.elem[parent]){
+                int tmp = this.elem[child];
+                this.elem[child] = this.elem[parent];
+                this.elem[parent] = tmp;
+                parent = child;
+                child = 2*parent+1;
+            }else{
+                //当调整过程中孩子节点没有父亲节点的大,就说明这棵树已经是大根堆了,不需要调整直接break即可
+                break;
+            }
+        }
+    }
+}
