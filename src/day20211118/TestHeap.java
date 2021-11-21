@@ -1,4 +1,7 @@
 package day20211118;
+
+import java.util.Arrays;
+
 /*
 1.顺序存储 存储的是一颗完全二叉树 如果是非完全二叉树会有空间浪费
 2.堆逻辑上是一颗完全二叉树
@@ -79,6 +82,70 @@ public class TestHeap {
                 //当调整过程中孩子节点没有父亲节点的大,就说明这棵树已经是大根堆了,不需要调整直接break即可
                 break;
             }
+        }
+    }
+    public void adjustUp(int child){
+        int parent = (child - 1)/2;
+        while(child > 0){
+            if(this.elem[child] > this.elem[parent]){
+                int tmp = this.elem[parent];
+                this.elem[parent] = this.elem[child];
+                this.elem[child] = tmp;
+                child = parent;
+                parent = (child-1)/2;
+            }else {
+                break;
+            }
+        }
+    }
+    public void push(int val){
+       if(isFull()){
+           //扩容
+           this.elem = Arrays.copyOf(this.elem,2*this.elem.length);
+       }
+       this.elem[this.usedSize] = val;//10
+        this.usedSize++;//11
+       adjustUp(this.usedSize-1);//10下标
+
+    }
+    public boolean isFull(){
+        return this.usedSize == this.elem.length;
+    }
+    public void pop(){
+        if(isEmpty()){
+            return;
+        }
+        int tmp = this.elem[0];
+        this.elem[0] = this.elem[this.usedSize-1];
+        this.elem[this.usedSize-1] = tmp;
+        this.usedSize--;//9 删除了
+        adjustDown(0,this.usedSize);
+
+    }
+    public boolean isEmpty(){
+        return this.usedSize == 0;
+    }
+    public int peek(){
+        if(isEmpty()){
+            return -1;
+        }
+        return this.elem[0];
+    }
+    //堆排序问题:从小到大-->建立大堆  从大到小-->建立小堆
+    /*
+    一定先创建大堆
+    调整每棵树
+    开始堆排序:
+    先交换 后调整 直到0结束
+     */
+    public void heapSort(){
+        int end = this.usedSize-1;
+        while(end > 0){
+            int tmp = this.elem[0];
+            this.elem[0] = this.elem[end];
+            this.elem[end] = tmp;
+            adjustDown(0,end);
+            end--;
         }
     }
 }
