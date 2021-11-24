@@ -1,6 +1,7 @@
 package day20211122;
 
 import java.util.Arrays;
+import java.util.Stack;
 
 /*
 排序的三大指标 : 时间复杂度
@@ -199,16 +200,202 @@ public class Sort {
         array[high] = tmp;
         return low;
     }
+    /*
+    快速排序:
+    三数取中法(挖坑法的优化)
+
+     */
+    public static void swap(int[] array,int i,int j){
+        int tmp = array[i];
+        array[i] = array[j];
+        array[j] = tmp;
+    }
+    public static void selectPivotMedianOfThree(int[] array,int start,int end,int mid){
+        //array[mid] <= array[start] <= array[end]
+        if(array[mid] > array[start]){
+            //array[mid] <= array[start]
+            swap(array,start,mid);
+        }
+        if(array[start] > array[end]){
+            //array[start] <= array[end]
+            swap(array,start,end);
+        }
+        if(array[mid] > array[end]){
+            swap(array,mid,end);
+            //array[mid] <= array[end]
+        }
+    }
+    /*
+    快速排序:第二种优化 取一个阈值用直接插入排序
+     */
+    public static void insertSort(int[] array,int start,int end){
+        for (int i = start+1; i <=end; i++) {//最坏:O(n)
+            int tmp = array[i];
+            int j = i-1;
+            for(; j >= start; j--){//最坏: O(n)
+                if(array[j] > tmp){
+                    array[j+1] = array[j];
+                }else{
+                    // array[j+1] = tmp;
+                    break;
+                }
+            }
+            array[j+1] = tmp;
+        }
+    }
     public static void quick(int[] array,int start,int end){
         if(start >= end){
             return;
         }
+        //判断两个数据之间的个数
+        if(end-start+1 <= 100){
+            insertSort(array,start,end);
+            return;
+        }
+        int mid = (start+end)/2;
+        selectPivotMedianOfThree(array,start,end,mid);
+
         int pivot = partition(array,start,end);
         quick(array,start,pivot-1);
         quick(array,pivot+1,end);
     }
-    public static void quickSort(int[] array){
+    public static void quickSort1(int[] array){
+
+
         quick(array,0,array.length-1);
+    }
+    /*
+    非递归实现快速排序
+     */
+    public static void quickSort(int[] array){
+        Stack<Integer> stack  = new Stack<>();
+        int start = 0;
+        int end = array.length-1;
+        int pivot = partition(array,start,end);
+        //左边有两个及以上元素
+        if(pivot > start+1){
+            stack.push(0);
+            stack.push(pivot-1);
+        }
+         //右边有两个及以上元素
+        if(pivot < end-1){
+            stack.push(pivot+1);
+            stack.push(end);
+        }
+        while(!stack.isEmpty()){
+            end = stack.pop();
+            start = stack.pop();
+            pivot = partition(array,start,end);
+            //左边有两个及以上元素
+            if(pivot > start+1){
+                stack.push(0);
+                stack.push(pivot-1);
+            }
+            //右边有两个及以上元素
+            if(pivot < end-1){
+                stack.push(pivot+1);
+                stack.push(end);
+            }
+        }
+    }
+    /*
+    归并排序
+    时间复杂度:O(n*log2n)
+    空间复杂度: O(n)
+    稳定性:稳定的
+     */
+    public static  void merge(int[] array,int low,int mid,int high){
+        int s1 = low;
+        int e1 = mid;
+        int s2 = mid+1;
+        int e2 = high;
+        int[] tmp = new int[high-low+1];
+        int k = 0;//代表tmp数组下标
+        while(s1 <= e1 && s2 <= e2){
+            if(array[s1] <= array[s2]){
+                tmp[k] = array[s1];
+                k++;
+                s1++;
+            }else{
+                tmp[k] = array[s2];
+                k++;
+                s2++;
+            }
+        }
+        //有两种情况
+        while (s1 <= e1){
+            //说明第二个归并段没有数据 把第一个归并段剩下的拷贝过来
+            tmp[k] = array[s1];
+            k++;
+            s1++;
+        }
+        while(s2 <= e2){
+            //说明第一个归并段没有数据 把第二个归并段剩下的拷贝过来
+            tmp[k] = array[s2];
+            k++;
+            s2++;
+        }
+        //tmp数组当中存储的是归并过的数据
+        for (int i = 0; i < tmp.length; i++) {
+            array[i+low] = tmp[i];
+        }
+    }
+    public static void mergeSortInternal(int[] array,int low,int high){
+        if(low >= high){
+            return;
+        }
+        int mid = (low+high)/2;
+        mergeSortInternal(array,low,mid);
+        mergeSortInternal(array,mid+1,high);
+        //合并的过程
+        merge(array,low,mid,high);
+    }
+    public static void mergeSort1(int[] array){
+        mergeSortInternal(array,0,array.length-1);
+    }
+    /*
+    归并排序: 非递归写法
+     */
+    public static  void merge2(int[] array,int gap){
+        int[] tmp = new int[array.length];
+        int k = 0;
+        int s1 = 0;
+        int e1 = s1+gap-1;
+        int s2 = e1+1;
+        int e2 = s2+gap-1 >= array.length ? array.length-1 : s2+gap-1;
+        //保证你有两个归并段
+        while(s2 < array.length){
+            while(s1 <= e1 && s2 <= e2){
+                if(array[s1] <= array[s2]){
+                    tmp[k++] = array[s1++];
+                    //这个跟上面写的等价
+                }else{
+                    tmp[k++] = array[s2++];
+                }
+            }
+            while (s1 <= e1){
+                tmp[k++] = array[s1++];
+            }
+            while(s2 <= e2){
+                tmp[k++] = array[s2++];
+            }
+            //走到这里说明一组完了 确定新的区间的开始和结束
+            s1 = e2+1;
+            e1 = s1+gap-1;
+            s2 = e1+1;
+            e2 = s2+gap-1 >= array.length ? array.length-1 : s2+gap-1;
+        }
+        while (s1 <= array.length-1){
+            tmp[k++] = array[s1++];
+        }
+        for (int i = 0; i < tmp.length; i++) {
+            array[i] = tmp[i];
+        }
+    }
+    public static void mergeSort(int[] array){
+        for (int i = 1; i < array.length; i*=2) {
+            merge2(array,i);
+        }
     }
     public static void main(String[] args) {
         int[] array = {10,6,9,3,5};
@@ -216,7 +403,8 @@ public class Sort {
         //shellSort(array);
         //selectSort(array);
         //heapSort(array);
-        quickSort(array);
+        //quickSort(array);
+        mergeSort(array);
         System.out.println(Arrays.toString(array));
     }
 }
