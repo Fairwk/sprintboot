@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GuessNum {
-    public static void main(String[] args) {
+    public static void main5(String[] args) {
         System.out.println("请输入一个人整数:");
         Scanner sc = new Scanner(System.in);
         int count = sc.nextInt();
@@ -90,7 +90,7 @@ public class GuessNum {
 
         }
     }
-    public static void main1(String[] args) {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Random random = new Random();
         int rand = random.nextInt(100)+1;
