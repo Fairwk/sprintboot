@@ -37,7 +37,8 @@ class People{
 
     @Override
     public String toString() {
-        return "People [name = " + name + ",age = " + age + ", num = " + num +" ]";
+        return "People [name = " + name + ",age = "
+                + age + ", num = " + num +" ]";
     }
 }
 public class PeopleDemo {
