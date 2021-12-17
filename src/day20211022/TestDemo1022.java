@@ -67,11 +67,18 @@ public class TestDemo1022 {
     public static void main(String[] args) {
         MyLinkedList myLinkedList = new MyLinkedList();
         myLinkedList.addLast(1);
-        myLinkedList.addLast(21);
-        myLinkedList.addLast(34);
+        myLinkedList.addLast(22);
+        myLinkedList.addLast(35);
         myLinkedList.addLast(44);
-        myLinkedList.addLast(54);
+        myLinkedList.addLast(56);
         myLinkedList.display();
+        //boolean flg = myLinkedList.chkPalindrome();
+        //System.out.println(flg);
+        //Node ret = myLinkedList.partition(10);
+        //myLinkedList.display2(ret);
+
+
+        //System.out.println(myLinkedList.FindKthToTail(2).data);
         MyLinkedList myLinkedList2 = new MyLinkedList();
         myLinkedList2.addLast(10);
         myLinkedList2.addLast(23);
@@ -79,12 +86,12 @@ public class TestDemo1022 {
         myLinkedList2.addLast(48);
         myLinkedList2.addLast(55);
         myLinkedList2.display();
-        Node ret = mergeTwoLists(myLinkedList.head,myLinkedList2.head);
-        myLinkedList2.display2(ret);
-        /*createCut(myLinkedList.head,myLinkedList2.head);
+        //Node ret = mergeTwoLists(myLinkedList.head,myLinkedList2.head);
+        //myLinkedList2.display2(ret);
+        createCut(myLinkedList.head,myLinkedList2.head);
 
         Node ret = getIntersectionNode(myLinkedList.head,myLinkedList2.head);
-        System.out.println(ret.data);*/
+        System.out.println(ret.data);
 
         /*boolean flg = myLinkedList.contains(10);
         System.out.println(flg);
@@ -105,9 +112,8 @@ public class TestDemo1022 {
        myLinkedList.display2(ret);*/
         //Node ret = myLinkedList.middleNode();
         //System.out.println(myLinkedList.middleNode().data);
-        //System.out.println(myLinkedList.FindKthToTail(3).data);
-        /*Node ret = myLinkedList.partition(10);
-        myLinkedList.display();*/
+        //Node ret = myLinkedList.partition(10);
+        //myLinkedList.display();
         /*Node ret = myLinkedList.deleteDuplication();
         myLinkedList.display();*/
 
