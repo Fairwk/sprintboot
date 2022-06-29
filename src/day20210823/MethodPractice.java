@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class MethodPractice {
-    public static int fibonacci(int n){
+    public static int fibonacci(int n){//斐波那契数数列      
         int a =0;
         int b = 1;
         int c = 0;
