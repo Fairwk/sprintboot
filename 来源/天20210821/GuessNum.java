@@ -47,19 +47,21 @@ public class GuessNum {
             }
         }
     }
-    public static void odd(int num){//打印奇数位
+    public static void odd(int num){//打印偶数位
+        //因为打印偶数位所以i为30，当num右移30位时此时为第一个偶数位，然后依次向后移，就是要打印2，4，... , 32
+        //1的二进制位写出来就是前面全是0，最后一位是1，所以当num右移时应该保证此时打印的那一位在最后一位，
+        //所以移30位保证目前打印的那一位在最后一位让他跟1相与，两位都是1才能是1，依次类推就能打印出所有偶数位
         for(int i = 30;i >= 0;i=i-2){
-            if((num&(1 << i)) != 0){
+            if((（num >> i) & 1) != 0){
                 System.out.println("1");
             }else{
                 System.out.println("0");
             }
         }
     }
-    public static void even(int num){//打印偶数位
-        //因为一共32位
+    public static void even(int num）{//打印奇数位与上面类似
         for(int i = 31;i >= 0;i=i-2){
-            if((num & (1 << i))!=0){
+            if(((num >> i) & 1)!=0){
                 System.out.println("1");
             }else{
                 System.out.println("0");
@@ -73,14 +75,14 @@ public class GuessNum {
         System.out.println();
         even(num);
     }
-    public static int NumberOf(int n) {
+    public static int NumberOf(int n) {//打印一个整数二进制中的所有1
         int count = 0;
         int flag = 1;
         while (flag != 0) {
-            if ((n & flag) != 0) {
+            if ((n & flag) != 0) {//所以n（也就是输入的整数）与1相与，输入的整数哪一位有1当1移到那一位就会知道，因为相与两个都是1才是1
                 count++;
             }
-            flag = flag << 1;
+            flag = flag << 1;//让flag向左移也就是1向左移，因为1的二进制位前面全是0，只有最后一位是1，所以向左移等于让1遍历前面所有的位置
         }
         return count;
     }
@@ -93,10 +95,11 @@ public class GuessNum {
 
         }
     }
+    //猜数字游戏
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Random random = new Random();
-        int rand = random.nextInt(100)+1;
+        int rand = random.nextInt(100)+1;//生成随机数，因为需要1-100的随机数，而random是[1,100),左闭右开的，所以需要给表达式加上1
         while(true){
             System.out.println("请输入一个数字:");
             int num = sc.nextInt();
